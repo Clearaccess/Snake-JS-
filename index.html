@@ -4,19 +4,39 @@
     <title>
         Snake
     </title>
-    <link type="stylesheet" href="app/css/reset.css">
-    <link type="stylesheet" href="app/css/main.css">
+    <link type="text/css" rel="stylesheet" href="app/css/reset.css">
+    <link rel="stylesheet" href="app/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="app/css/bootstrap/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="app/css/main.css">
 </head>
 
 <body>
-    <div id="pane">
-        <canvas id="gamePane" height="660" width="660">
-        </canvas>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <p class="navbar-text navbar-left">Score: </p>
+                    <p id="score" class="navbar-text navbar-left">0 </p>
+                </div>
+            </div>
+        </nav>
     </div>
-    <script src="app/js/jquery-3.1.1.min.js"></script>
-    <script src="app/js/views/view.js"></script>
-    <script src="app/js/controllers/controller.js"></script>
-    <script src="app/js/models/model.js"></script>
+    <div class="row">
+        <div class="text-center">
+            <canvas id="gamePane" height="600" width="600"></canvas>
+        </div>
+    </div>
+</div>
+<script src="app/js/jquery-3.1.1.min.js"></script>
+<script src="app/js/bootstrap/bootstrap.min.js"></script>
+<script src="app/js/app.js"></script>
+<script src="app/js/models/elements/frog.js"></script>
+<script src="app/js/models/elements/part.js"></script>
+<script src="app/js/models/elements/snake.js"></script>
+<script src="app/js/views/view.js"></script>
+<script src="app/js/models/model.js"></script>
+<script src="app/js/controllers/controller.js"></script>
 </body>
 
 </html>

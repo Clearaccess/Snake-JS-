@@ -1,16 +1,18 @@
-var View = (function(window){
+'use strict';
 
-    var HEIGHT=20;
-    var WIDTH=20;
-    var OFFSET=2;
-    var N=20;
-    var COLOR_SNAKE="yellow";
-    var COLOR_FROG="green";
-    var COLOR_CELL="black";
-    var RADIUS=10;
+APP.view = (function(window){
 
-    var _canvas=window.document.getElementById('gamePane');
-    var _context=_canvas.getContext('2d');
+    var HEIGHT=25,
+        WIDTH=25,
+        OFFSET=2,
+        N=APP.config.NUM_CELLS,
+        COLOR_SNAKE="yellow",
+        COLOR_FROG="green",
+        COLOR_CELL="black",
+        RADIUS=10,
+        _canvas=window.document.getElementById('gamePane'),
+        _score=window.document.getElementById('score'),
+        _context=_canvas.getContext('2d');
 
     var drawField = function(){
         var i=0;
@@ -36,6 +38,10 @@ var View = (function(window){
         for(i=0;i<frogs.length;i++){
             _drawFrog(frogs[i],COLOR_FROG);
         }
+    };
+
+    var drawScore=function(score){
+        _score.innerHTML=score;
     };
 
     var _drawCell= function(x,y, color){
@@ -70,6 +76,7 @@ var View = (function(window){
     return {
         drawField: drawField,
         drawSnake: drawSnake,
-        drawFrogs: drawFrogs
+        drawFrogs: drawFrogs,
+        drawScore: drawScore
     };
 })(window || {});
