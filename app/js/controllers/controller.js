@@ -14,35 +14,63 @@ APP.controller = (function (model, view, win) {
         SPACE_KEY=32,
         LEFT_KEY=97,
         RIGHT_KEY=100,
+        TIME=750,
         _frogs,
         _snake,
         _score,
         _field = [],
         _stateGame=NON_STATE;
 
+    var _newGame=function(){
+        _stateGame = NON_STATE;
+        _view.drawNewGame();
+        _init();
+        _view.drawField();
+        _view.drawSnake(_snake);
+        _view.drawFrogs(_frogs);
+    };
+
     var startGame = function () {
         _stateGame = RUNNABLE;
-        _init();
+        _view.drawRunGame();
         _run();
     };
 
     var stopGame = function () {
         _stateGame = STOP;
+        _view.drawStopGame();
+    };
+
+    var pauseGame=function(){
+        _stateGame = PAUSE;
+        _view.drawPauseGame();
+    };
+
+    var resumeGame=function(){
+        _stateGame = RUNNABLE;
+        _view.drawRunGame();
+        _run();
     };
 
     var _run = function () {
         var timerId = setTimeout(function tick() {
             if (_stateGame == STOP) {
-                _stateGame=NON_STATE;
                 clearTimeout(timerId);
                 return;
-            } 
+            }
+
+            if (_stateGame == PAUSE) {
+                clearTimeout(timerId);
+                return;
+            }
+
+            _defineGameSituation();
             _snake.move();
             _view.drawField();
             _view.drawSnake(_snake);
             _view.drawFrogs(_frogs);
-            timerId = setTimeout(tick, 1000);
-        }, 1000);
+            timerId = setTimeout(tick, TIME);
+        }, TIME);
     };
 
     var _subscribeEvents = function () {
@@ -55,19 +83,19 @@ APP.controller = (function (model, view, win) {
     var _handKeys = function (event) {
         if (event.keyCode == SPACE_KEY) {
             if (_stateGame == RUNNABLE) {
-                stopGame();
-            }
-
-            if (_stateGame == NON_STATE) {
+                pauseGame();
+            } else if (_stateGame == PAUSE) {
+                resumeGame();
+            } else if (_stateGame == NON_STATE) {
                 startGame();
+            } else if (_stateGame == STOP) {
+                _newGame();
             }
         }
 
         if (event.keyCode == LEFT_KEY && _stateGame==RUNNABLE) {
             _snake.turnLeft();
-        }
-
-        if (event.keyCode == RIGHT_KEY && _stateGame==RUNNABLE) {
+        } else if (event.keyCode == RIGHT_KEY && _stateGame==RUNNABLE) {
             _snake.turnRight();
         }
 
@@ -81,7 +109,6 @@ APP.controller = (function (model, view, win) {
         _snake = _model.getSnake();
         _initFrogs();
         _score = 0;
-
     };
 
     var _initFrogs = function () {
@@ -156,12 +183,60 @@ APP.controller = (function (model, view, win) {
 
         return array;
     };
+    
+    var _defineGameSituation=function(){
+        var i=0,
+            futurePosition=_snake.moveTest();
 
-    _view.drawField();
+        if(_eatSnakeSelf(futurePosition)){
+            stopGame();
+            return;
+        }
+
+        if(_eatSnakeFrog(futurePosition)){
+            _snake.grow();
+            _updateScore(1);
+        }
+
+    };
+
+    var _eatSnakeSelf=function(pos){
+        var body=_snake.getBody(),
+            i=0,
+            len=body.length;
+
+        for(i=0;i<len;i++){
+            if(body[i].getX()==pos.getX() && body[i].getY()==pos.getY()){
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    var _eatSnakeFrog=function(pos){
+        var i=0,
+            len=_frogs.length,
+            newFrog={};
+
+        for(i=0;i<len;i++){
+            if(_frogs[i].getX()==pos.getX() && _frogs[i].getY()==pos.getY()){
+                newFrog=_placeFrog();
+                _frogs.splice(i,1);
+                _frogs.push(newFrog);
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     _subscribeEvents();
+    _newGame();
 
     return {
         startGame: startGame,
-        stopGame: stopGame
+        stopGame: stopGame,
+        pauseGame: pauseGame
     };
 })(APP.model || {}, APP.view || {}, window || {});

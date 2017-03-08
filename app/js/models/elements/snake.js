@@ -17,6 +17,7 @@ APP.Snake=(function (){
     var grow=function(){
         var x=this.body[this.body.length-1].getX();
         var y=this.body[this.body.length-1].getY();
+        this.isGrow=true;
         var newPart=new Part(x,y);
         this.body.push(newPart);
     };
@@ -62,8 +63,13 @@ APP.Snake=(function (){
             head;
 
         for(i=len-1, j=len-2;i>0;i--,j--){
-            body[i].setX(body[j].getX());
-            body[i].setY(body[j].getY());
+            if(this.isRise && i==len-1) {
+                this.isRise=false;
+                continue;
+            } else {
+                body[i].setX(body[j].getX());
+                body[i].setY(body[j].getY());
+            }
         }
 
         head=body[0];
@@ -127,6 +133,7 @@ APP.Snake=(function (){
         this.body=init(field);
         this.direction=RIGHT;
         this.wasTurn=false;
+        this.isRise=false;
     };
 
     Snake.prototype={

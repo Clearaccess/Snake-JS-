@@ -9,10 +9,33 @@ APP.view = (function(window){
         COLOR_SNAKE="yellow",
         COLOR_FROG="green",
         COLOR_CELL="black",
+        COLOR_BACKGROUND_RUN_GAME="lightgreen",
+        COLOR_BACKGROUND_GAME_OVER="lightgreen",
+        COLOR_BACKGROUND_START_GAME="lightgreen",
         RADIUS=10,
         _canvas=window.document.getElementById('gamePane'),
         _score=window.document.getElementById('score'),
         _context=_canvas.getContext('2d');
+
+    var drawNewGame=function(){
+        $('body').removeClass("gameOver runGame pause");
+        $('body').addClass('welcome');
+    };
+
+    var drawStopGame=function(){
+        $('body').removeClass("welcome runGame pause");
+        $('body').addClass('gameOver');
+    };
+
+    var drawRunGame=function(){
+        $('body').removeClass("welcome gameOver pause");
+        $('body').addClass('runGame');
+    };
+
+    var drawPauseGame=function(){
+        $('body').removeClass("welcome gameOver runGame");
+        $('body').addClass('pause');
+    };
 
     var drawField = function(){
         var i=0;
@@ -77,6 +100,10 @@ APP.view = (function(window){
         drawField: drawField,
         drawSnake: drawSnake,
         drawFrogs: drawFrogs,
-        drawScore: drawScore
+        drawScore: drawScore,
+        drawNewGame: drawNewGame,
+        drawRunGame: drawRunGame,
+        drawStopGame: drawStopGame,
+        drawPauseGame: drawPauseGame
     };
 })(window || {});

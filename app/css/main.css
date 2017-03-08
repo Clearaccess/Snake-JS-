@@ -1,0 +1,15 @@
+.runGame{
+    background-color: lightgreen;
+}
+
+.gameOver{
+    background-color: lightpink;
+}
+
+.welcome{
+    background-color: white;
+}
+
+.pause{
+    background-color: lightgoldenrodyellow;
+}
