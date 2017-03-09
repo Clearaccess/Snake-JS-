@@ -61,6 +61,8 @@ APP.Snake=(function (){
             j=0,
             len=this.body.length,
             head;
+			
+		_clearTrack(this.body, this.field);
 
         for(i=len-1, j=len-2;i>0;i--,j--){
             if(this.isRise && i==len-1) {
@@ -94,6 +96,8 @@ APP.Snake=(function (){
         if(head.getY()>NUM_CELLS-1){
             head.setY(0);
         }
+		
+		_fillTrack(this.body, this.field);
 
         this.wasTurn=false;
     };
@@ -128,9 +132,28 @@ APP.Snake=(function (){
     var _createPart=function(x,y){
         return new Part(x,y);
     };
+	
+	var _clearTrack=function(body, field){
+		var i=0,
+			len=body.length;
+		
+		for(i=0;i<len;i++){
+			field[body[i].getX()][body[i].getY()]=0;
+		}
+	};
+	
+	var _fillTrack=function(body, field){
+		var i=0,
+			len=body.length;
+		
+		for(i=0;i<len;i++){
+			field[body[i].getX()][body[i].getY()]=1;
+		}
+	};
 
     Snake=function(field){
         this.body=init(field);
+		this.field=field;
         this.direction=RIGHT;
         this.wasTurn=false;
         this.isRise=false;

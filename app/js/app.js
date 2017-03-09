@@ -3,7 +3,7 @@ var APP=APP || {};
 
 APP.config={
     NUM_CELLS: 20,
-    NUM_FROGS: 5
+    NUM_FROGS: 10
 };
 
 APP.model={};
